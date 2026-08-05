@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diah Pramesti — Portfolio</title>
+    <link rel="icon" href="https://fav.farm/✨" />
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.75);
+            --surface-hover: rgba(255, 255, 255, 0.95);
+            --border: rgba(226, 232, 240, 0.8);
+            --border-hover: rgba(99, 102, 241, 0.3);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #312e81; /* Deep Indigo Luxury */
+            --accent-soft: rgba(99, 102, 241, 0.08);
+            --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+            --shadow-hover: 0 20px 30px -10px rgba(15, 23, 42, 0.08);
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* Dynamic Background Mesh */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 60%, rgba(244, 63, 94, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.04) 0%, transparent 45%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1.25rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-family: var(--font-head);
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .brand:hover .brand-dot {
+            transform: scale(1.8);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.25s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            padding: 6.5rem 0 4.5rem;
+            text-align: left;
+            max-width: 820px;
+        }
+
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.75rem;
+            box-shadow: var(--shadow-subtle);
+            backdrop-filter: blur(8px);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        h1 {
+            font-family: var(--font-head);
+            font-size: clamp(2.5rem, 4.8vw, 4rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            margin-bottom: 2.25rem;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 4.5rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-head);
+            font-size: 1.85rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .section-sub {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* --- GRID & CARDS --- */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.25rem;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-subtle);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #6366f1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.85rem;
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .card-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.6rem;
+            line-height: 1.35;
+        }
+
+        .card-body {
+            font-size: 0.925rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .bullet-list {
+            padding-left: 1.2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .bullet-list li { margin-bottom: 0.5rem; }
+
+        /* --- FILTERS & TAGS --- */
+        .filter-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.825rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        .filter-btn.active {
+            background: var(--text-main);
+            color: #fff;
+            border-color: var(--text-main);
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background: var(--accent-soft);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            margin-right: 0.4rem;
+            margin-bottom: 0.4rem;
+            transition: all 0.2s;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.65rem 1.35rem;
+            border-radius: 10px;
+            background: #fff;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.25s ease;
+        }
+
+        .btn-action:hover {
+            background: var(--text-main);
+            color: #fff;
+            border-color: var(--text-main);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-action i {
+            transition: transform 0.25s ease;
+        }
+
+        .btn-action:hover i {
+            transform: translateX(3px);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 3.5rem 0;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .social-icons a {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            margin-left: 1.25rem;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .loading, .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            footer { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-mesh"></div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="brand">
+                <span class="brand-dot"></span>
+                Diah Pramesti
+            </a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#portfolio">Credentials & Work</a></li>
+                <li><a href="#skills">Competencies</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <div class="container">
+        <header class="hero">
+            <div class="badge-status">
+                <span class="status-dot"></span>
+                Open for Entry-Level Roles & Collaborative Projects
+            </div>
+            <h1>International Business & Data Analytics</h1>
+            <p class="hero-desc">International Business graduate passionate about combining data-driven insights with digital marketing to support business growth and operational efficiency.</p>
+            <div>
+                <a href="#portfolio" class="btn-action">Explore Portfolio & Credentials <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </header>
+
+        <!-- ABOUT & EDUCATION -->
+        <section id="about">
+            <div class="section-header">
+                <h2 class="section-title">Academic Background</h2>
+                <span class="section-sub">Strong global business foundation with high academic standing</span>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Education</div>
+                        <h3 class="card-title" style="margin-top: 0.5rem;">Universitas Jenderal Soedirman</h3>
+                        <p class="card-body" style="margin-bottom: 0.75rem;">
+                            <strong>Diploma 3 in International Business</strong><br>
+                            Cumulative GPA: <strong>3.70 / 4.00</strong> (Graduation: June 2026)
+                        </p>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 600;">Core Academic Focus:</div>
+                        <span class="tag-pill">Marketing Communication</span>
+                        <span class="tag-pill">Consumer Behavior</span>
+                        <span class="tag-pill">MIS</span>
+                        <span class="tag-pill">International Marketing</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Core Interest</div>
+                        <h3 class="card-title" style="margin-top: 0.5rem;">Analytics & Marketing Strategy</h3>
+                        <p class="card-body">Eager to apply structured data interpretation and modern marketing techniques to assist teams in solving business challenges.</p>
+                    </div>
+                    <div>
+                        <span class="tag-pill">Data Analytics</span>
+                        <span class="tag-pill">Digital Marketing</span>
+                        <span class="tag-pill">Financial Admin</span>
+                        <span class="tag-pill">Content Strategy</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience">
+            <div class="section-header">
+                <h2 class="section-title">Professional Experience</h2>
+                <span class="section-sub">Proven performance in administrative precision & digital execution</span>
+            </div>
+            <div class="grid-2" id="experience-grid">
+                <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Synchronizing experience data...</div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO & CERTIFICATIONS -->
+        <section id="portfolio">
+            <div class="section-header">
+                <h2 class="section-title">Credentials & Works</h2>
+                <span class="section-sub">Live dynamic sync from secure database</span>
+            </div>
+
+            <div class="filter-container" id="filter-container">
+                <button class="filter-btn active" onclick="filterCategory('All')">All</button>
+            </div>
+
+            <div class="grid-2" id="portfolio-grid">
+                <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Synchronizing database...</div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills">
+            <div class="section-header">
+                <h2 class="section-title">Professional Competencies</h2>
+                <span class="section-sub">Analytics software stack & global communication</span>
+            </div>
+            <div class="card">
+                <div style="margin-bottom: 1.5rem;">
+                    <div class="card-tag" style="margin-bottom: 0.5rem;">Data & Operational Tools</div>
+                    <span class="tag-pill">Microsoft Excel</span>
+                    <span class="tag-pill">Tableau</span>
+                    <span class="tag-pill">Python</span>
+                    <span class="tag-pill">SQL</span>
+                    <span class="tag-pill">Canva</span>
+                    <span class="tag-pill">MS Office Suite</span>
+                </div>
+                <div>
+                    <div class="card-tag" style="margin-bottom: 0.5rem;">Languages</div>
+                    <span class="tag-pill">Indonesian (Native)</span>
+                    <span class="tag-pill">English (Professional Working Proficiency)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div>© 2026 Diah Pramesti. Built with precision and modern UI standards.</div>
+            <div class="social-icons">
+                <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="mailto:hi.diahpramesti@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Direct Native Public CSV URLs from Nyonya's Sheet
+        const sheetPubId = "e/2PACX-1vQrpOGyzYSWarEcCUEPGi8EOYKUON0y6tHETBDCcx9lgVWHWz2CxY2655V8xWGJWs-cK8Ayt0Vmt92t";
+        const expGid = "1489099062";
+
+        const csvUrlPorto = `https://docs.google.com/spreadsheets/d/${sheetPubId}/pub?output=csv`;
+        const csvUrlExp = `https://docs.google.com/spreadsheets/d/${sheetPubId}/pub?gid=${expGid}&single=true&output=csv`;
+
+        let globalData = [];
+
+        function parseCSV(text) {
+            let lines = [];
+            let row = [];
+            let inQuotes = false;
+            let currentStr = '';
+
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                let nextChar = text[i+1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentStr += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    row.push(currentStr.trim());
+                    currentStr = '';
+                } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                    if (char === '\r' && nextChar === '\n') i++;
+                    row.push(currentStr.trim());
+                    if (row.length > 1 || row[0] !== '') lines.push(row);
+                    row = [];
+                    currentStr = '';
+                } else {
+                    currentStr += char;
+                }
+            }
+            if (currentStr || row.length > 0) {
+                row.push(currentStr.trim());
+                lines.push(row);
+            }
+            return lines;
+        }
+
+        // Default Backup Data jika tab Sheet belum diisi
+        const fallbackExperiences = [
+            {
+                posisi: "Finance & Admin Intern",
+                perusahaan: "DPPKBP3A Banyumas",
+                periode: "Oct - Nov 2025",
+                poin: [
+                    "Audited daily financial documentation and payroll reports with <strong>100% accuracy</strong>.",
+                    "Operated government systems (SIPD RI, Eling SPT, & Coretax) for tax compliance and audit trails.",
+                    "Coordinated inventory stock validation and handover logistics for public distribution."
+                ]
+            },
+            {
+                posisi: "Creative Economy Specialist",
+                perusahaan: "BEM FEB Unsoed",
+                periode: "2024",
+                poin: [
+                    "Spearheaded digital marketing campaigns for official FEBpreneur platforms.",
+                    "Designed visual promotional assets and drove audience engagement strategies."
+                ]
+            }
+        ];
+
+        // --- FETCH PORTFOLIO ---
+        async function fetchPortfolioData() {
+            try {
+                const response = await fetch(csvUrlPorto);
+                const dataText = await response.text();
+                const parsedRows = parseCSV(dataText);
+
+                const validRows = parsedRows.filter(row => row.some(cell => cell.trim() !== ''));
+                const dataRows = validRows.length > 1 ? validRows.slice(1) : validRows;
+
+                globalData = dataRows.map(row => ({
+                    judul: row[0] || 'Untitled Project',
+                    kategori: row[1] || 'Credential',
+                    deskripsi: row[2] || '',
+                    link_file: row[3] || '#',
+                    tipe_file: row[4] || 'Document',
+                    tanggal: row[5] || ''
+                }));
+
+                renderFilters(globalData);
+                renderCards(globalData);
+
+            } catch (error) {
+                console.error('Error fetching portfolio:', error);
+                document.getElementById('portfolio-grid').innerHTML = 
+                    `<div class="empty-state">Unable to load dynamic credentials right now.</div>`;
+            }
+        }
+
+        // --- FETCH EXPERIENCE ---
+        async function fetchExperienceData() {
+            try {
+                const response = await fetch(csvUrlExp);
+                const dataText = await response.text();
+                const parsedRows = parseCSV(dataText);
+
+                const validRows = parsedRows.filter(row => row.some(cell => cell.trim() !== ''));
+                const dataRows = validRows.length > 1 ? validRows.slice(1) : validRows;
+
+                if (dataRows.length === 0) {
+                    renderExperience(fallbackExperiences);
+                    return;
+                }
+
+                const experiences = dataRows.map(row => {
+                    let bulletPoints = [];
+                    if (row[3]) bulletPoints.push(row[3]);
+                    if (row[4]) bulletPoints.push(row[4]);
+                    if (row[5]) bulletPoints.push(row[5]);
+
+                    return {
+                        posisi: row[0] || 'Position',
+                        perusahaan: row[1] || 'Company/Organization',
+                        periode: row[2] || '',
+                        poin: bulletPoints
+                    };
+                });
+
+                renderExperience(experiences);
+
+            } catch (error) {
+                console.warn('Experience fetch fallback active:', error);
+                renderExperience(fallbackExperiences);
+            }
+        }
+
+        function renderExperience(data) {
+            const expGrid = document.getElementById('experience-grid');
+            if (!data || data.length === 0) {
+                expGrid.innerHTML = `<div class="empty-state">No experience records found.</div>`;
+                return;
+            }
+
+            expGrid.innerHTML = data.map(item => `
+                <div class="card">
+                    <div>
+                        <div class="card-header-flex">
+                            <span class="card-tag">${item.posisi}</span>
+                            <span class="card-date">${item.periode}</span>
+                        </div>
+                        <h3 class="card-title">${item.perusahaan}</h3>
+                        <ul class="bullet-list">
+                            ${item.poin.map(p => `<li>${p}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFilters(data) {
+            const categories = ['All', ...new Set(data.map(item => item.kategori).filter(Boolean))];
+            const filterContainer = document.getElementById('filter-container');
+            
+            filterContainer.innerHTML = categories.map(cat => 
+                `<button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="filterCategory('${cat}', this)">${cat}</button>`
+            ).join('');
+        }
+
+        function filterCategory(category, element) {
+            if (element) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                element.classList.add('active');
+            }
+
+            if (category === 'All') {
+                renderCards(globalData);
+            } else {
+                const filtered = globalData.filter(item => item.kategori === category);
+                renderCards(filtered);
+            }
+        }
+
+        function renderCards(data) {
+            const grid = document.getElementById('portfolio-grid');
+            
+            if (data.length === 0) {
+                grid.innerHTML = `<div class="empty-state">No credentials found in this category.</div>`;
+                return;
+            }
+
+            grid.innerHTML = data.map(item => {
+                let iconClass = 'fa-arrow-up-right-from-square';
+                const tipe = item.tipe_file.toLowerCase();
+                if (tipe.includes('pdf')) iconClass = 'fa-file-pdf';
+                else if (tipe.includes('gambar') || tipe.includes('foto') || tipe.includes('image')) iconClass = 'fa-image';
+                else if (tipe.includes('link') || tipe.includes('web')) iconClass = 'fa-globe';
+
+                return `
+                    <div class="card">
+                        <div>
+                            <div class="card-header-flex">
+                                <span class="card-tag">${item.kategori}</span>
+                                <span class="card-date">${item.tanggal}</span>
+                            </div>
+                            <h3 class="card-title">${item.judul}</h3>
+                            <p class="card-body">${item.deskripsi}</p>
+                        </div>
+                        <div>
+                            <a href="${item.link_file}" target="_blank" rel="noopener noreferrer" class="btn-action">
+                                View ${item.tipe_file} <i class="fa-solid ${iconClass}"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        fetchPortfolioData();
+        fetchExperienceData();
+    </script>
+</body>
+</html>
