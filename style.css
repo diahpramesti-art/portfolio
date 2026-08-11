@@ -536,3 +536,8 @@ footer {
     .nav-links.active { display: flex; }
     .mobile-menu-btn { display: block; }
 }
+
+/* Bikin tulisan & ikon tombol Quick Preview jadi putih terang */
+.btn-action {
+    color: #FFFFFF !important;
+}
