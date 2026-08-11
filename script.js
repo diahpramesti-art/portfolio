@@ -231,7 +231,7 @@ function renderCards(data) {
 
         const imageElement = item.image_url ? 
             `<div style="margin-bottom: 1.2rem; overflow: hidden; border-radius: 12px; border: 1px solid var(--border); max-height: 180px;">
-                <img src="${item.image_url}" alt="${item.judul}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.style.display='none'">
+                <img src="${item.image_url}" alt="${item.judul}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.parentElement.style.display='none'">
              </div>` : '';
 
         return `
@@ -245,12 +245,12 @@ function renderCards(data) {
                     <h3 class="card-title">${item.judul}</h3>
                     <p class="card-body">${item.deskripsi}</p>
                 </div>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <button onclick="openModal(${item.id})" class="btn-action" style="background: transparent; border-color: var(--border); font-size: 0.8rem; padding: 0.5rem 0.9rem;">
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <button onclick="openModal(${item.id})" class="btn-action" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.25); color: #F8FAFC; font-size: 0.8rem; padding: 0.5rem 0.9rem;">
                         Quick Preview <i class="fa-solid fa-eye"></i>
                     </button>
                     <a href="${item.link_file}" target="_blank" rel="noopener noreferrer" class="btn-action" style="font-size: 0.8rem; padding: 0.5rem 0.9rem;">
-                        View ${item.tipe_file} <i class="fa-solid ${iconClass}"></i>
+                        View Document <i class="fa-solid ${iconClass}"></i>
                     </a>
                 </div>
             </div>
