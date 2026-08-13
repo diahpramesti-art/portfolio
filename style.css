@@ -672,3 +672,30 @@ footer {
     .mobile-menu-btn { display: block; }
     .nav-status-saas { display: none; }
 }
+
+/* =========================================================
+   ✨ FIX MODAL SCROLLBAR & OVERFLOW
+   ========================================================= */
+.modal-overlay {
+    overflow-y: auto !important;
+}
+
+.modal-card {
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+}
+
+/* Custom Scrollbar Cantik untuk Modal */
+.modal-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-card::-webkit-scrollbar-track {
+    background: rgba(11, 15, 25, 0.5);
+    border-radius: 10px;
+}
+
+.modal-card::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 10px;
+}
