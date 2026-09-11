@@ -77,24 +77,27 @@ nav {
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
     z-index: 100;
+    width: 100%;
 }
 
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 70px;
+    height: 75px;
+    gap: 1rem;
 }
 
 .brand {
     font-family: 'Syne', sans-serif;
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     color: var(--text-main);
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
 }
 
 .brand-dot {
@@ -628,15 +631,16 @@ footer {
 .nav-status-saas {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.5rem;
     background: rgba(16, 185, 129, 0.08);
     border: 1px solid rgba(16, 185, 129, 0.25);
-    padding: 0.35rem 0.8rem;
+    padding: 0.3rem 0.75rem;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: #34D399;
     font-weight: 600;
     backdrop-filter: blur(8px);
+    white-space: nowrap;
 }
 
 .status-dot-pulse {
@@ -660,7 +664,7 @@ footer {
     .nav-links {
         display: none;
         position: absolute;
-        top: 70px;
+        top: 75px;
         left: 0;
         width: 100%;
         background: #0B0F19;
