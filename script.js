@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast();
         });
     }
+<<<<<<< HEAD
     const backToTopBtn = document.getElementById('backToTopBtn');
     if (backToTopBtn) {
         window.addEventListener('scroll', () => {
@@ -57,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+=======
+
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
     fetchPortfolioData();
     fetchExperienceData();
 });
@@ -76,7 +80,11 @@ function parseCSV(text) {
 
     for (let i = 0; i < text.length; i++) {
         let char = text[i];
+<<<<<<< HEAD
         let nextChar = text[i + 1];
+=======
+        let nextChar = text[i+1];
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
 
         if (char === '"') {
             if (inQuotes && nextChar === '"') {
@@ -143,7 +151,11 @@ async function fetchPortfolioData() {
 
     } catch (error) {
         console.error('Error fetching portfolio:', error);
+<<<<<<< HEAD
         document.getElementById('portfolio-grid').innerHTML =
+=======
+        document.getElementById('portfolio-grid').innerHTML = 
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
             `<div class="empty-state">Unable to load dynamic credentials right now.</div>`;
     }
 }
@@ -205,11 +217,18 @@ function renderFilters(data) {
     const categories = ['All', ...new Set(data.map(item => item.kategori).filter(Boolean))];
     const filterContainer = document.getElementById('filter-container');
     if (!filterContainer) return;
+<<<<<<< HEAD
 
     filterContainer.innerHTML = categories.map(cat => {
         const count = cat === 'All' ? data.length : data.filter(item => item.kategori === cat).length;
         return `<button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="filterCategory('${cat}', this)">${cat} <span style="font-size: 0.7rem; opacity: 0.7; margin-left: 2px;">(${count})</span></button>`;
     }).join('');
+=======
+    
+    filterContainer.innerHTML = categories.map(cat => 
+        `<button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="filterCategory('${cat}', this)">${cat}</button>`
+    ).join('');
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
 }
 
 function filterCategory(category, element) {
@@ -231,7 +250,11 @@ function filterAndSearch(searchVal = '') {
 
     if (searchVal.trim() !== '') {
         const query = searchVal.toLowerCase();
+<<<<<<< HEAD
         filtered = filtered.filter(item =>
+=======
+        filtered = filtered.filter(item => 
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
             item.judul.toLowerCase().includes(query) ||
             item.deskripsi.toLowerCase().includes(query) ||
             item.kategori.toLowerCase().includes(query)
@@ -244,7 +267,11 @@ function filterAndSearch(searchVal = '') {
 function renderCards(data) {
     const grid = document.getElementById('portfolio-grid');
     if (!grid) return;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
     if (data.length === 0) {
         grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No credentials match your search.</div>`;
         return;
@@ -270,7 +297,11 @@ function renderCards(data) {
             badgesHTML += `</div>`;
         }
 
+<<<<<<< HEAD
         const imageElement = item.primary_image ?
+=======
+        const imageElement = item.primary_image ? 
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
             `<div style="position: relative; margin-bottom: 1.2rem; overflow: hidden; border-radius: 12px; border: 1px solid var(--border); max-height: 180px;">
                 <img src="${item.primary_image}" alt="${item.judul}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.parentElement.style.display='none'">
                 ${badgesHTML}
@@ -309,7 +340,11 @@ function openModal(id) {
     currentImageIndex = 0;
 
     const modalContent = document.getElementById('modal-content');
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
     // 1. Generate Image Carousel
     let imageCarouselHTML = '';
     if (currentModalImages.length > 0) {
@@ -393,4 +428,8 @@ function updateCarouselDisplay() {
 
 function closeModal() {
     document.getElementById('project-modal').style.display = 'none';
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> cc903f4d26df0e8ca1b9fc987b146826009c210f
