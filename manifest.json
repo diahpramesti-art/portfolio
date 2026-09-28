@@ -1,0 +1,18 @@
+{
+  "name": "Diah Pramesti — Portfolio",
+  "short_name": "Diah Portfolio",
+  "description": "Portfolio of Diah Pramesti - Business Management & Digital Operations Specialist",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0B0F19",
+  "theme_color": "#818CF8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://fav.farm/✨",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
