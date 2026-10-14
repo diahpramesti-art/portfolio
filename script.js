@@ -367,7 +367,7 @@ function renderCards(data) {
                     <p class="card-body">${item.deskripsi}</p>
                 </div>
                 <div class="card-actions-row">
-                    <button onclick="openModal(${item.id})" class="btn-action btn-card-compact" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #F8FAFC;">
+                    <button onclick="openModal(${item.id})" class="btn-action btn-card-compact btn-secondary">
                         <i class="fa-solid fa-eye"></i> Preview
                     </button>
                     ${documentBtnHTML}
@@ -396,8 +396,8 @@ function openModal(id) {
         if (linksList.length > 1) labelText += ` #${idx + 1}`;
 
         return `
-            <a href="${link}" target="_blank" rel="noopener noreferrer" class="btn-action" style="width: 100%; justify-content: space-between; margin-bottom: 0.4rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.82rem;">
-                <span><i class="fa-solid fa-file-pdf" style="color: var(--accent); margin-right: 0.5rem;"></i> ${labelText}</span>
+            <a href="${link}" target="_blank" rel="noopener noreferrer" class="btn-action" style="width: 100%; justify-content: space-between; margin-bottom: 0.4rem; background: #EFF6FF; border: 1px solid #DBEAFE; color: #1E40AF !important; font-size: 0.82rem;">
+                <span><i class="fa-solid fa-file-pdf" style="color: #1E40AF; margin-right: 0.5rem;"></i> ${labelText}</span>
                 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
             </a>
         `;
@@ -405,7 +405,7 @@ function openModal(id) {
 
     modalContent.innerHTML = `
         <div class="card-tag" style="margin-bottom: 0.3rem;">${item.kategori || 'Credential'} • ${item.tanggal || ''}</div>
-        <h2 style="font-family: 'Syne', sans-serif; font-size: 1.35rem; margin-bottom: 0.75rem; color: #FFFFFF;">${item.judul || 'Untitled Project'}</h2>
+        <h2 style="font-family: 'Syne', sans-serif; font-size: 1.35rem; margin-bottom: 0.75rem; color: var(--text-main);">${item.judul || 'Untitled Project'}</h2>
         
         <p style="color: var(--text-muted); font-size: 0.86rem; line-height: 1.6; margin-bottom: 1.25rem;">${item.deskripsi || 'No description provided.'}</p>
 
@@ -485,7 +485,7 @@ document.getElementById('contact-form')?.addEventListener('submit', async functi
     }
 });
 
-// Fetch Skills Data dari Google Sheets (Hanya merender Skill Pills)
+// Fetch Skills Data dari Google Sheets
 async function fetchSkillsData() {
     try {
         const response = await fetch(csvUrlSkills);

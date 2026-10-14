@@ -87,7 +87,6 @@ iframe {
 
 .bg-mesh {
     display: none;
-    /* Dihapus total agar tampilan benar-benar bersih */
 }
 
 .container {
@@ -99,7 +98,7 @@ iframe {
 }
 
 /* ==========================================================================
-   3. FLOATING NAVBAR
+   3. FLOATING NAVBAR & BRAND LOGO
    ========================================================================== */
 nav {
     position: fixed;
@@ -138,11 +137,25 @@ nav {
     white-space: nowrap;
 }
 
-.brand-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
+.brand-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #F8FAFC;
+    color: #0F172A;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
     border-radius: 50%;
+    border: 1.5px solid #E2E8F0;
+    margin-right: 0.2rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+.brand-dot-inner {
+    color: #1E40AF;
 }
 
 .nav-status-saas {
@@ -204,7 +217,7 @@ nav {
 }
 
 /* ==========================================================================
-   4. HERO SECTION
+   4. HERO SECTION & BUTTONS
    ========================================================================== */
 .hero {
     padding: 8rem 0 2.5rem;
@@ -250,6 +263,7 @@ nav {
     margin-bottom: 2.2rem;
 }
 
+/* UTAMA & SEKUNDER BUTTONS */
 .btn-action {
     display: inline-flex;
     align-items: center;
@@ -271,6 +285,19 @@ nav {
     border-color: var(--accent);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
+}
+
+.btn-secondary {
+    background: #FFFFFF !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text-main) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+
+.btn-secondary:hover {
+    background: #F1F5F9 !important;
+    border-color: #CBD5E1 !important;
+    color: var(--accent) !important;
 }
 
 .metrics-grid {
