@@ -4,15 +4,11 @@ function getPlatformName(url) {
         const hostname = new URL(url).hostname.replace('www.', '');
         const brand = hostname.split('.')[0];
         if (!brand) return '';
-        // Ubah huruf pertama jadi kapital (misal: dicoding -> Dicoding)
         return brand.charAt(0).toUpperCase() + brand.slice(1);
     } catch (e) {
         return '';
     }
 }
-
-// 📊 GLOBAL CHART INSTANCE TRACKER
-let competencyChartInstance = null;
 
 // 🛠️ HELPER OTOMATIS: UBAH LINK GOOGLE DRIVE JADI EMBED ANTI-BLOKIR
 function fixDriveUrl(url) {
@@ -35,7 +31,7 @@ function trackEvent(action, category, label) {
     }
 }
 
-// CSV Configuration (Portofolio, Pengalaman & Skill)
+// CSV Configuration (Portofolio, Pengalaman & Skill dari Google Sheets)
 const sheetPubId = "e/2PACX-1vQrpOGyzYSWarEcCUEPGi8EOYKUON0y6tHETBDCcx9lgVWHWz2CxY2655V8xWGJWs-cK8Ayt0Vmt92t";
 const expGid = "1489099062";
 const skillsGid = "1536167160";
@@ -63,17 +59,6 @@ const observer = new IntersectionObserver((entries) => {
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('section').forEach(section => observer.observe(section));
 
-    // ✨ SPOTLIGHT GLOW EFFECT TRACKER
-    document.addEventListener('mousemove', (e) => {
-        document.querySelectorAll('.card').forEach(card => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-        });
-    });
-
     // Mobile Nav
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
@@ -84,11 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 📍 SCROLLSPY - ACTIVE NAVBAR LINK
+    // Scrollspy active nav link
     window.addEventListener('scroll', () => {
         let current = '';
         const sections = document.querySelectorAll('section');
-
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             if (window.pageYOffset >= (sectionTop - 150)) {
@@ -110,18 +94,18 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', (e) => filterAndSearch(e.target.value));
     }
 
-    // Copy Email Event + Analytics Tracking
+    // Copy Email Event
     const copyBtn = document.getElementById('copy-email-btn');
     if (copyBtn) {
         copyBtn.addEventListener('click', (e) => {
             e.preventDefault();
             navigator.clipboard.writeText('hi.diahpramesti@gmail.com');
             showToast();
-            trackEvent('copy_email', 'Contact', 'Email Copied to Clipboard');
+            trackEvent('copy_email', 'Contact', 'Email Copied');
         });
     }
 
-    // ⌨️ KEYBOARD NAVIGATION CONTROLLER (Modal & Carousel)
+    // Keyboard Controller
     document.addEventListener('keydown', (e) => {
         const modal = document.getElementById('project-modal');
         const contactModal = document.getElementById('contact-modal');
@@ -135,11 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Load Data Google Sheets
+    // Fetch All Dynamic Data from Google Sheets
     fetchPortfolioData();
     fetchExperienceData();
     fetchSkillsData();
-    initColorCustomizer();
     initDynamicGreeting();
     fetchFaqData();
 });
@@ -188,7 +171,7 @@ function parseCSV(text) {
     return lines;
 }
 
-// Fetch Portfolio Data
+// Fetch Portfolio Data dari Google Sheets
 async function fetchPortfolioData() {
     try {
         const response = await fetch(csvUrlPorto);
@@ -227,23 +210,14 @@ async function fetchPortfolioData() {
         renderCards(globalData);
         updateLiveMetrics(globalData);
 
-        // 🔗 DEEP LINKING: Otomatis buka modal jika URL mengandung hash (#item-X)
-        const hash = window.location.hash;
-        if (hash && hash.startsWith('#item-')) {
-            const itemId = parseInt(hash.replace('#item-', ''), 10);
-            if (!isNaN(itemId)) {
-                setTimeout(() => openModal(itemId), 400);
-            }
-        }
-
     } catch (error) {
         console.error('Error fetching portfolio:', error);
         document.getElementById('portfolio-grid').innerHTML =
-            `<div class="empty-state">Unable to load dynamic credentials right now.</div>`;
+            `<div style="color: var(--text-muted);">Unable to load credentials right now.</div>`;
     }
 }
 
-// Fetch Experience Data
+// Fetch Experience Data dari Google Sheets
 async function fetchExperienceData() {
     try {
         const response = await fetch(csvUrlExp);
@@ -253,11 +227,7 @@ async function fetchExperienceData() {
         const validRows = parsedRows.filter(row => row.some(cell => cell.trim() !== ''));
         const dataRows = validRows.length > 1 ? validRows.slice(1) : validRows;
 
-        if (dataRows.length === 0) {
-            document.getElementById('experience-grid').innerHTML =
-                `<div style="color: var(--text-muted); padding: 1rem;">No experience data available.</div>`;
-            return;
-        }
+        if (dataRows.length === 0) return;
 
         const experiences = dataRows.map(row => {
             let bulletPoints = [];
@@ -277,10 +247,6 @@ async function fetchExperienceData() {
 
     } catch (error) {
         console.warn('Experience fetch error:', error);
-        const expGrid = document.getElementById('experience-grid');
-        if (expGrid) {
-            expGrid.innerHTML = `<div style="color: var(--text-muted); padding: 1rem;">Unable to load experience data right now.</div>`;
-        }
     }
 }
 
@@ -367,7 +333,7 @@ function renderCards(data) {
     if (!grid) return;
 
     if (data.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No credentials match your search.</div>`;
+        grid.innerHTML = `<div style="color: var(--text-muted); padding: 2rem;">No credentials match your search.</div>`;
         return;
     }
 
@@ -378,22 +344,9 @@ function renderCards(data) {
         else if (tipe.includes('gambar') || tipe.includes('foto') || tipe.includes('image')) iconClass = 'fa-image';
         else if (tipe.includes('link') || tipe.includes('web') || tipe.includes('github')) iconClass = 'fa-globe';
 
-        let badgesHTML = '';
-        if (item.images.length > 1 || item.links.length > 1) {
-            badgesHTML = `<div style="position: absolute; bottom: 8px; right: 8px; display: flex; gap: 0.4rem;">`;
-            if (item.images.length > 1) {
-                badgesHTML += `<span class="image-count-badge"><i class="fa-solid fa-layer-group"></i> ${item.images.length} Media</span>`;
-            }
-            if (item.links.length > 1) {
-                badgesHTML += `<span class="image-count-badge" style="border-color: rgba(56, 189, 248, 0.4); color: #38BDF8;"><i class="fa-solid fa-file-pdf"></i> ${item.links.length} Files</span>`;
-            }
-            badgesHTML += `</div>`;
-        }
-
         const imageElement = item.primary_image ?
             `<div class="card-img-wrapper">
                 <img src="${item.primary_image}" alt="${item.judul}" loading="lazy">
-                ${badgesHTML}
              </div>` : '';
 
         const documentBtnHTML = (item.primary_link && item.primary_link !== '#') ? `
@@ -424,12 +377,10 @@ function renderCards(data) {
     }).join('');
 }
 
-// 🍱 MCKINSEY-STYLE BENTO BOX MODAL QUICK VIEW LOGIC
+// Quick View Modal
 function openModal(id) {
     const item = globalData.find(d => Number(d.id) === Number(id));
     if (!item) return;
-
-    trackEvent('view_credential_detail', 'Portfolio', item.judul || 'Untitled');
 
     currentModalImages = item.images || [];
     currentImageIndex = 0;
@@ -437,97 +388,30 @@ function openModal(id) {
     const modalContent = document.getElementById('modal-content');
     if (!modalContent) return;
 
-    const fallbackImg = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop";
-
-    let imageCarouselHTML = '';
-    if (currentModalImages.length > 0) {
-        const hasControls = currentModalImages.length > 1;
-        imageCarouselHTML = `
-            <div class="carousel-container">
-                <img id="carousel-img" src="${currentModalImages[0]}" onerror="this.onerror=null; this.src='${fallbackImg}';" alt="Preview Asset">
-                ${hasControls ? `
-                    <button class="carousel-btn prev" onclick="changeImage(-1)" aria-label="Previous Image"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="carousel-btn next" onclick="changeImage(1)" aria-label="Next Image"><i class="fa-solid fa-chevron-right"></i></button>
-                    <div class="carousel-counter" id="carousel-counter">1 / ${currentModalImages.length}</div>
-                ` : ''}
-            </div>
-            ${hasControls ? `
-                <div class="carousel-thumbnails">
-                    ${currentModalImages.map((img, idx) => `
-                        <img src="${img}" class="thumb ${idx === 0 ? 'active' : ''}" onclick="setImageIndex(${idx})" onerror="this.onerror=null; this.src='${fallbackImg}';" alt="Thumbnail ${idx + 1}">
-                    `).join('')}
-                </div>
-            ` : ''}
-        `;
-    }
-
     const linksList = (item.links || []).filter(link => link && link !== '#');
 
     const pdfButtonsHTML = linksList.length > 0 ? linksList.map((link, idx) => {
-        const lowerLink = link.toLowerCase();
-        const lowerCat = (item.kategori || '').toLowerCase();
-
-        // Indikator otomatis apakah ini sertifikat/badge
-        const isBadge = lowerLink.includes('badge') ||
-            lowerLink.includes('cert') ||
-            lowerLink.includes('verify') ||
-            lowerCat.includes('certif') ||
-            lowerCat.includes('credential');
-
-        const iconClass = isBadge ? 'fa-award' : 'fa-file-pdf';
-
-        // Ekstrak nama platform otomatis dari URL (Dicoding, Forage, Coursera, dll)
         const platform = getPlatformName(link);
-        let labelText = isBadge ? 'View Digital Badge / Certificate' : 'View Document File';
-
-        if (platform) {
-            const platformLower = platform.toLowerCase();
-            // Khusus cloud storage, tampilkan label dokumen bersih
-            if (platformLower === 'drive' || platformLower === 'docs' || platformLower === 'dropbox') {
-                labelText = 'View Document File';
-            } else {
-                labelText = isBadge ? `View ${platform} Credential` : `View ${platform} Document`;
-            }
-        }
-
+        let labelText = platform ? `View ${platform} Document` : 'View Document File';
         if (linksList.length > 1) labelText += ` #${idx + 1}`;
 
         return `
-            <a href="${link}" target="_blank" rel="noopener noreferrer" class="btn-action" style="width: 100%; justify-content: flex-start; margin-bottom: 0.4rem; background: rgba(129, 140, 248, 0.12); border: 1px solid rgba(129, 140, 248, 0.35); color: #FFF; font-size: 0.82rem;">
-                <i class="fa-solid ${iconClass}" style="color: var(--accent); margin-right: 0.5rem;"></i> ${labelText}
-                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem; margin-left: auto;"></i>
+            <a href="${link}" target="_blank" rel="noopener noreferrer" class="btn-action" style="width: 100%; justify-content: space-between; margin-bottom: 0.4rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); font-size: 0.82rem;">
+                <span><i class="fa-solid fa-file-pdf" style="color: var(--accent); margin-right: 0.5rem;"></i> ${labelText}</span>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
             </a>
         `;
-    }).join('') : '<p style="font-size: 0.8rem; color: var(--text-muted);">No attached document or badge link available.</p>';
+    }).join('') : '<p style="font-size: 0.8rem; color: var(--text-muted);">No attached document link available.</p>';
 
     modalContent.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-            <span style="width: 10px; height: 10px; border-radius: 50%; background: #FF5F56; display: inline-block;"></span>
-            <span style="width: 10px; height: 10px; border-radius: 50%; background: #FFBD2E; display: inline-block;"></span>
-            <span style="width: 10px; height: 10px; border-radius: 50%; background: #27C93F; display: inline-block;"></span>
-            <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.5rem; font-family: monospace;">Portfolio Detail Hub</span>
-        </div>
-
         <div class="card-tag" style="margin-bottom: 0.3rem;">${item.kategori || 'Credential'} • ${item.tanggal || ''}</div>
         <h2 style="font-family: 'Syne', sans-serif; font-size: 1.35rem; margin-bottom: 0.75rem; color: #FFFFFF;">${item.judul || 'Untitled Project'}</h2>
         
-        <div class="bento-grid">
-            <div class="bento-card ${currentModalImages.length > 0 ? '' : 'bento-full'}">
-                <div class="bento-title"><i class="fa-solid fa-align-left"></i> Overview</div>
-                <p style="color: var(--text-muted); font-size: 0.86rem; line-height: 1.6;">${item.deskripsi || 'No description provided.'}</p>
-            </div>
+        <p style="color: var(--text-muted); font-size: 0.86rem; line-height: 1.6; margin-bottom: 1.25rem;">${item.deskripsi || 'No description provided.'}</p>
 
-            ${currentModalImages.length > 0 ? `
-                <div class="bento-card">
-                    <div class="bento-title"><i class="fa-solid fa-image"></i> Visual Asset</div>
-                    ${imageCarouselHTML}
-                </div>
-            ` : ''}
-
-            <div class="bento-card bento-full">
-                <div class="bento-title"><i class="fa-solid fa-folder-open"></i> Key Deliverables & Documents (${linksList.length})</div>
-                ${pdfButtonsHTML}
-            </div>
+        <div style="margin-top: 1rem;">
+            <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;">Key Deliverables & Documents</div>
+            ${pdfButtonsHTML}
         </div>
     `;
 
@@ -537,8 +421,6 @@ function openModal(id) {
         setTimeout(() => modal.classList.add('active'), 10);
         document.body.style.overflow = 'hidden';
     }
-
-    history.replaceState(null, null, `#item-${id}`);
 }
 
 function closeModal() {
@@ -549,54 +431,21 @@ function closeModal() {
         modal.style.display = 'none';
     }, 300);
     document.body.style.overflow = 'auto';
-
-    history.replaceState(null, null, window.location.pathname);
-}
-
-document.getElementById('project-modal')?.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
-        closeModal();
-    }
-});
-
-function changeImage(direction) {
-    if (currentModalImages.length <= 1) return;
-    currentImageIndex = (currentImageIndex + direction + currentModalImages.length) % currentModalImages.length;
-    updateCarouselDisplay();
-}
-
-function setImageIndex(index) {
-    currentImageIndex = index;
-    updateCarouselDisplay();
-}
-
-function updateCarouselDisplay() {
-    const imgEl = document.getElementById('carousel-img');
-    const counterEl = document.getElementById('carousel-counter');
-    if (imgEl) imgEl.src = currentModalImages[currentImageIndex];
-    if (counterEl) counterEl.textContent = `${currentImageIndex + 1} / ${currentModalImages.length}`;
-
-    document.querySelectorAll('.carousel-thumbnails .thumb').forEach((thumb, idx) => {
-        if (idx === currentImageIndex) thumb.classList.add('active');
-        else thumb.classList.remove('active');
-    });
 }
 
 function scrollPortfolio(direction) {
     const grid = document.getElementById('portfolio-grid');
     if (!grid) return;
-    const scrollAmount = 350 * direction;
-    grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    grid.scrollBy({ left: 330 * direction, behavior: 'smooth' });
 }
 
-// 📩 DIRECT CONTACT MODAL CONTROLLER
+// Contact Modal
 function openContactModal() {
     const modal = document.getElementById('contact-modal');
     if (!modal) return;
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
     document.body.style.overflow = 'hidden';
-    trackEvent('open_contact_form', 'Engagement', 'Contact Modal Opened');
 }
 
 function closeContactModal() {
@@ -607,19 +456,10 @@ function closeContactModal() {
     document.body.style.overflow = 'auto';
 }
 
-document.getElementById('contact-modal')?.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
-        closeContactModal();
-    }
-});
-
 // Submit Form Handler
 document.getElementById('contact-form')?.addEventListener('submit', async function (e) {
     e.preventDefault();
     const submitBtn = document.getElementById('contact-submit-btn');
-    const originalText = submitBtn.innerHTML;
-
-    submitBtn.innerHTML = `<span>Sending...</span> <i class="fa-solid fa-spinner fa-spin"></i>`;
     submitBtn.disabled = true;
 
     try {
@@ -634,25 +474,18 @@ document.getElementById('contact-form')?.addEventListener('submit', async functi
         if (result.success) {
             closeContactModal();
             this.reset();
-            const toast = document.getElementById('toast');
-            if (toast) {
-                toast.textContent = "Message sent successfully! Diah Pramesti will reply soon. ✨";
-                showToast();
-            }
-            trackEvent('send_message_success', 'Contact', 'Direct Message Sent');
+            showToast();
         } else {
             alert('Failed to send message: ' + result.message);
         }
     } catch (error) {
         console.error('Contact Form Error:', error);
-        alert('An error occurred. Please try again.');
     } finally {
-        submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
     }
 });
 
-// 📊 DYNAMIC SKILLS & CHART.JS FROM GOOGLE SHEETS
+// Fetch Skills Data dari Google Sheets (Hanya merender Skill Pills)
 async function fetchSkillsData() {
     try {
         const response = await fetch(csvUrlSkills);
@@ -667,12 +500,10 @@ async function fetchSkillsData() {
         const skillsData = dataRows.map(row => ({
             name: row[0] || 'Skill',
             category: row[1] || 'General',
-            proficiency: parseInt(row[2], 10) || 80,
             icon: row[3] || 'fa-check'
         }));
 
         renderSkillPills(skillsData);
-        renderDynamicChart(skillsData);
 
     } catch (error) {
         console.warn('Skills fetch error:', error);
@@ -686,9 +517,7 @@ function renderSkillPills(skills) {
     const categories = {};
     skills.forEach(s => {
         const catName = s.category || 'General Competencies';
-        if (!categories[catName]) {
-            categories[catName] = [];
-        }
+        if (!categories[catName]) categories[catName] = [];
         categories[catName].push(s);
     });
 
@@ -697,7 +526,6 @@ function renderSkillPills(skills) {
         let iconHeader = 'fa-briefcase';
         if (catName.toLowerCase().includes('data')) iconHeader = 'fa-chart-line';
         else if (catName.toLowerCase().includes('market')) iconHeader = 'fa-bullhorn';
-        else if (catName.toLowerCase().includes('design')) iconHeader = 'fa-palette';
 
         return `
             <div class="card">
@@ -715,64 +543,7 @@ function renderSkillPills(skills) {
     }).join('');
 }
 
-function renderDynamicChart(skills) {
-    const ctx = document.getElementById('competencyChart')?.getContext('2d');
-    if (!ctx) return;
-
-    if (competencyChartInstance) {
-        competencyChartInstance.destroy();
-    }
-
-    const chartSkills = skills.slice(0, 6);
-    const labels = chartSkills.map(s => s.name);
-    const chartValues = chartSkills.map(s => s.proficiency);
-
-    competencyChartInstance = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Proficiency Level (%)',
-                data: chartValues,
-                backgroundColor: 'rgba(129, 140, 248, 0.25)',
-                borderColor: '#818CF8',
-                borderWidth: 2,
-                pointBackgroundColor: '#38BDF8',
-                pointBorderColor: '#FFFFFF',
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                r: {
-                    angleLines: { color: 'rgba(255, 255, 255, 0.12)' },
-                    grid: { color: 'rgba(255, 255, 255, 0.08)' },
-                    pointLabels: {
-                        color: '#94A3B8',
-                        font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600' }
-                    },
-                    ticks: { display: false, max: 100, min: 0 }
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: 'rgba(18, 24, 38, 0.9)',
-                    titleColor: '#FFFFFF',
-                    bodyColor: '#A5B4FC',
-                    borderColor: 'rgba(129, 140, 248, 0.4)',
-                    borderWidth: 1,
-                    padding: 10
-                }
-            }
-        }
-    });
-}
-
-// Back to top
+// Back to Top Listener
 document.addEventListener('DOMContentLoaded', () => {
     const backToTopBtn = document.getElementById('backToTop');
     if (!backToTopBtn) return;
@@ -786,103 +557,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
 
-// Auto-close Mobile Menu
-document.addEventListener('click', (e) => {
-    const navLinks = document.getElementById('navLinks');
-    const menuToggle = document.getElementById('menuToggle');
-    if (!navLinks || !menuToggle) return;
-
-    if (navLinks.classList.contains('active') &&
-        !navLinks.contains(e.target) &&
-        !menuToggle.contains(e.target)) {
-        navLinks.classList.remove('active');
-    }
-});
-
-// 🎨 DYNAMIC ACCENT COLOR CUSTOMIZER LOGIC
-function initColorCustomizer() {
-    const colorDots = document.querySelectorAll('.color-dot');
-    const savedColor = localStorage.getItem('portfolio_accent_color');
-    const savedGlow = localStorage.getItem('portfolio_accent_glow');
-
-    if (savedColor && savedGlow) {
-        applyAccentColor(savedColor, savedGlow);
-        colorDots.forEach(dot => {
-            if (dot.getAttribute('data-color') === savedColor) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
-        });
-    }
-
-    colorDots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            const color = dot.getAttribute('data-color');
-            const glow = dot.getAttribute('data-glow');
-
-            colorDots.forEach(d => d.classList.remove('active'));
-            dot.classList.add('active');
-
-            applyAccentColor(color, glow);
-            localStorage.setItem('portfolio_accent_color', color);
-            localStorage.setItem('portfolio_accent_glow', glow);
-
-            trackEvent('change_accent_color', 'Customization', color);
-        });
-    });
-}
-
-function applyAccentColor(color, glow) {
-    document.documentElement.style.setProperty('--accent', color);
-    document.documentElement.style.setProperty('--accent-glow', glow);
-    document.documentElement.style.setProperty('--border-hover', color);
-}
-
-// ⏰ DYNAMIC TIME-BASED GREETING IN HERO BADGE
+// Dynamic Greeting
 function initDynamicGreeting() {
     const badge = document.querySelector('.badge-status');
     if (!badge) return;
 
     const hour = new Date().getHours();
-    let greeting = 'Open for Entry-Level Roles & Collaborative Projects';
+    let greeting = 'Open for Entry-Level Roles & Projects';
 
-    if (hour >= 5 && hour < 12) {
-        greeting = '☕ Good Morning! Open for Entry-Level Roles & Projects';
-    } else if (hour >= 12 && hour < 18) {
-        greeting = '🌤️ Good Afternoon! Open for Entry-Level Roles & Projects';
-    } else {
-        greeting = '🌙 Good Evening! Open for Entry-Level Roles & Projects';
-    }
+    if (hour >= 5 && hour < 12) greeting = '☕ Good Morning! Open for Roles & Projects';
+    else if (hour >= 12 && hour < 18) greeting = '🌤️ Good Afternoon! Open for Roles & Projects';
+    else greeting = '🌙 Good Evening! Open for Roles & Projects';
 
     badge.innerHTML = `<span class="status-dot"></span> ${greeting}`;
 }
 
-// 💬 DYNAMIC RECRUITER FAQ FROM GOOGLE SHEETS
+// Recruiter FAQ dari Google Sheets
 let dynamicFaqData = [
-    {
-        question: "⚡ Current Availability?",
-        answer: "Ready for immediate onboarding in entry-level roles across Business Operations, Administration, and Digital Support."
-    },
-    {
-        question: "🎯 Core Capabilities?",
-        answer: "Detail-oriented admin work, clean spreadsheet reporting in Excel & Power BI, and reliable daily teamwork."
-    },
-    {
-        question: "🎓 Academic Foundation?",
-        answer: "Diploma (D3) in International Business from Universitas Jenderal Soedirman with a 3.70 GPA."
-    },
-    {
-        question: "📩 Best Way to Connect?",
-        answer: "Feel free to click 'Request Resume' above, send a direct message via the contact form below, or reach out on LinkedIn."
-    }
+    { question: "⚡ Current Availability?", answer: "Ready for immediate onboarding in entry-level roles across Business Operations, Administration, and Digital Support." },
+    { question: "🎯 Core Capabilities?", answer: "Detail-oriented admin work, clean spreadsheet reporting in Excel & Power BI, and reliable daily teamwork." },
+    { question: "🎓 Academic Foundation?", answer: "Diploma (D3) in International Business from Universitas Jenderal Soedirman with a 3.70 GPA." }
 ];
 
 async function fetchFaqData() {
@@ -890,13 +588,9 @@ async function fetchFaqData() {
 
     try {
         const response = await fetch(csvUrlFaq);
-        if (!response.ok) throw new Error("Sheet response not OK");
+        if (!response.ok) return;
 
         const dataText = await response.text();
-        if (dataText.includes("<!DOCTYPE html>") || dataText.includes("<html")) {
-            throw new Error("Returned HTML page instead of CSV");
-        }
-
         const parsedRows = parseCSV(dataText);
         const validRows = parsedRows.filter(row => row.some(cell => cell.trim() !== ''));
         const dataRows = validRows.length > 1 ? validRows.slice(1) : validRows;
@@ -909,7 +603,7 @@ async function fetchFaqData() {
             renderRecruiterFAQ();
         }
     } catch (error) {
-        console.warn('FAQ sheet using fallback data:', error);
+        console.warn('FAQ fetch error:', error);
     }
 }
 
@@ -933,43 +627,35 @@ function showFaqAnswer(index, btn) {
     document.querySelectorAll('.faq-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
 
-    answerText.style.opacity = '0';
-    setTimeout(() => {
-        answerText.innerHTML = dynamicFaqData[index].answer;
-        answerText.style.opacity = '1';
-    }, 150);
-
-    trackEvent('click_faq', 'Engagement', dynamicFaqData[index].question);
+    answerText.innerHTML = dynamicFaqData[index].answer;
 }
 
-// 🔢 AUTO-CALCULATED LIVE METRICS WITH STRICT CATEGORY FILTER
+// Counter Animation
 function updateLiveMetrics(data) {
     if (!data || data.length === 0) return;
 
     const certCount = data.filter(item => {
         const cat = (item.kategori || '').toLowerCase();
-        return cat.includes('certif') || cat.includes('credential') || cat.includes('sertifikat') || cat.includes('badge');
+        return cat.includes('certif') || cat.includes('credential') || cat.includes('sertifikat');
     }).length;
 
     const pureProjectCount = data.filter(item => {
         const cat = (item.kategori || '').toLowerCase();
-        return cat.includes('project') || cat.includes('karya') || cat.includes('case') || cat.includes('study') || cat.includes('work');
+        return cat.includes('project') || cat.includes('karya') || cat.includes('work');
     }).length;
 
     animateCounter('metric-cert-count', certCount > 0 ? certCount : 2);
     animateCounter('metric-project-count', pureProjectCount > 0 ? pureProjectCount : 1);
 }
 
-// ⏱️ FUNGSI ANIMASI PUTARAN ANGKA (COUNT-UP)
 function animateCounter(elementId, targetValue) {
     const el = document.getElementById(elementId);
     if (!el) return;
 
     let start = 0;
-    const duration = 1200;
+    const duration = 1000;
     const stepTime = 30;
-    const steps = duration / stepTime;
-    const increment = targetValue / steps;
+    const increment = targetValue / (duration / stepTime);
 
     const timer = setInterval(() => {
         start += increment;
