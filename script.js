@@ -31,6 +31,29 @@ function trackEvent(action, category, label) {
     }
 }
 
+// 🔒 HELPER SCROLL LOCK BACKGROUND
+function toggleBodyScroll(disable) {
+    if (disable) {
+        document.body.classList.add('modal-open');
+        document.documentElement.classList.add('modal-open');
+    } else {
+        document.body.classList.remove('modal-open');
+        document.documentElement.classList.remove('modal-open');
+    }
+}
+
+// 🖼️ CAROUSEL GAMBAR MODAL
+function changeImage(step) {
+    if (!currentModalImages || currentModalImages.length <= 1) return;
+    currentImageIndex = (currentImageIndex + step + currentModalImages.length) % currentModalImages.length;
+
+    const imgEl = document.getElementById('modal-img-display');
+    const counterEl = document.getElementById('modal-img-counter');
+
+    if (imgEl) imgEl.src = currentModalImages[currentImageIndex];
+    if (counterEl) counterEl.textContent = `${currentImageIndex + 1} / ${currentModalImages.length}`;
+}
+
 // CSV Configuration (Portofolio, Pengalaman & Skill dari Google Sheets)
 const sheetPubId = "e/2PACX-1vQrpOGyzYSWarEcCUEPGi8EOYKUON0y6tHETBDCcx9lgVWHWz2CxY2655V8xWGJWs-cK8Ayt0Vmt92t";
 const expGid = "1489099062";
@@ -117,6 +140,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (contactModal && contactModal.classList.contains('active')) {
             if (e.key === 'Escape') closeContactModal();
         }
+    });
+
+    // 🖱️ SHORTCUT TUTUP MODAL KLIK DENGAN BACKDROP / OUTSIDE
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeModal();
+                closeContactModal();
+            }
+        });
     });
 
     // Fetch All Dynamic Data from Google Sheets
@@ -377,7 +410,7 @@ function renderCards(data) {
     }).join('');
 }
 
-// Quick View Modal
+// 👁️ QUICK VIEW MODAL
 function openModal(id) {
     const item = globalData.find(d => Number(d.id) === Number(id));
     if (!item) return;
@@ -387,6 +420,22 @@ function openModal(id) {
 
     const modalContent = document.getElementById('modal-content');
     if (!modalContent) return;
+
+    // Render Gambar / Galeri Carousel jika ada
+    let galleryHTML = '';
+    if (currentModalImages.length > 0) {
+        const hasMultiple = currentModalImages.length > 1;
+        galleryHTML = `
+            <div class="modal-gallery-wrapper">
+                <img id="modal-img-display" src="${currentModalImages[0]}" alt="${item.judul}">
+                ${hasMultiple ? `
+                    <button class="modal-nav-btn prev" onclick="changeImage(-1)" aria-label="Previous Image"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="modal-nav-btn next" onclick="changeImage(1)" aria-label="Next Image"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div class="modal-img-counter" id="modal-img-counter">1 / ${currentModalImages.length}</div>
+                ` : ''}
+            </div>
+        `;
+    }
 
     const linksList = (item.links || []).filter(link => link && link !== '#');
 
@@ -404,6 +453,7 @@ function openModal(id) {
     }).join('') : '<p style="font-size: 0.8rem; color: var(--text-muted);">No attached document link available.</p>';
 
     modalContent.innerHTML = `
+        ${galleryHTML}
         <div class="card-tag" style="margin-bottom: 0.3rem;">${item.kategori || 'Credential'} • ${item.tanggal || ''}</div>
         <h2 style="font-family: 'Syne', sans-serif; font-size: 1.35rem; margin-bottom: 0.75rem; color: var(--text-main);">${item.judul || 'Untitled Project'}</h2>
         
@@ -419,7 +469,7 @@ function openModal(id) {
     if (modal) {
         modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('active'), 10);
-        document.body.style.overflow = 'hidden';
+        toggleBodyScroll(true);
     }
 }
 
@@ -430,7 +480,7 @@ function closeModal() {
     setTimeout(() => {
         modal.style.display = 'none';
     }, 300);
-    document.body.style.overflow = 'auto';
+    toggleBodyScroll(false);
 }
 
 function scrollPortfolio(direction) {
@@ -439,13 +489,13 @@ function scrollPortfolio(direction) {
     grid.scrollBy({ left: 330 * direction, behavior: 'smooth' });
 }
 
-// Contact Modal
+// ✉️ CONTACT MODAL
 function openContactModal() {
     const modal = document.getElementById('contact-modal');
     if (!modal) return;
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
-    document.body.style.overflow = 'hidden';
+    toggleBodyScroll(true);
 }
 
 function closeContactModal() {
@@ -453,7 +503,7 @@ function closeContactModal() {
     if (!modal) return;
     modal.classList.remove('active');
     setTimeout(() => modal.style.display = 'none', 300);
-    document.body.style.overflow = 'auto';
+    toggleBodyScroll(false);
 }
 
 // Submit Form Handler
