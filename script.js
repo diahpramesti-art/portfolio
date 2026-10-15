@@ -31,12 +31,27 @@ function trackEvent(action, category, label) {
     }
 }
 
-// 🔒 HELPER SCROLL LOCK BACKGROUND (TANPA MEMBUAT HALAMAN LOMPAT KE ATAS)
+// 🔒 HELPER SCROLL LOCK BACKGROUND (MEMPROSASI SEMENTARA POSISI SCROLL DENGAN PRESISI SEHINGGA TIDAK AKAN LOMPAT KE ATAS)
+let savedScrollPosition = 0;
+
 function toggleBodyScroll(disable) {
     if (disable) {
-        document.body.classList.add('modal-open');
+        savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
     } else {
-        document.body.classList.remove('modal-open');
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        if (scrollY) {
+            window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+        } else {
+            window.scrollTo(0, savedScrollPosition);
+        }
     }
 }
 
