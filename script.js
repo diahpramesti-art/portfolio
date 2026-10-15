@@ -31,27 +31,29 @@ function trackEvent(action, category, label) {
     }
 }
 
-// 🔒 HELPER SCROLL LOCK BACKGROUND (MEMPROSASI SEMENTARA POSISI SCROLL DENGAN PRESISI SEHINGGA TIDAK AKAN LOMPAT KE ATAS)
-let savedScrollPosition = 0;
+// 🔒 HELPER SCROLL LOCK BACKGROUND (MEMPROSASI POSISI SCROLL PRESISI SUPAYA TIDAK AKAN LOMPAT KE ATAS)
+let savedScrollY = 0;
 
 function toggleBodyScroll(disable) {
     if (disable) {
-        savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        savedScrollY = window.pageYOffset || document.documentElement.scrollTop;
         document.body.style.position = 'fixed';
-        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.top = `-${savedScrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
         document.body.style.width = '100%';
         document.body.style.overflow = 'hidden';
     } else {
-        const scrollY = document.body.style.top;
+        const scrollY = Math.abs(parseInt(document.body.style.top || '0', 10)) || savedScrollY;
+        document.documentElement.style.scrollBehavior = 'auto';
         document.body.style.position = '';
         document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
         document.body.style.width = '';
         document.body.style.overflow = '';
-        if (scrollY) {
-            window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
-        } else {
-            window.scrollTo(0, savedScrollPosition);
-        }
+        window.scrollTo(0, scrollY);
+        document.documentElement.style.scrollBehavior = '';
     }
 }
 
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // SHORTCUT TUTUP MODAL KLIK PADA AREA OUTSIDE / BACKDROP
+    // SHORTCUT TUTUP MODAL KLIK OUTSIDE / BACKDROP DAN CEGAH SCROLL BOCOR
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
@@ -163,6 +165,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeContactModal();
             }
         });
+        overlay.addEventListener('wheel', (e) => {
+            if (e.target === overlay) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     });
 
     // Fetch All Dynamic Data from Google Sheets
@@ -465,9 +472,11 @@ function openModal(id) {
     }).join('') : '<p style="font-size: 0.8rem; color: var(--text-muted);">No attached document link available.</p>';
 
     modalContent.innerHTML = `
+        <div class="modal-top-bar">
+            <span class="card-tag">${item.kategori || 'Credential'} • ${item.tanggal || ''}</span>
+        </div>
         ${galleryHTML}
-        <div class="card-tag" style="margin-bottom: 0.3rem;">${item.kategori || 'Credential'} • ${item.tanggal || ''}</div>
-        <h2 style="font-family: 'Syne', sans-serif; font-size: 1.35rem; margin-bottom: 0.75rem; color: var(--text-main);">${item.judul || 'Untitled Project'}</h2>
+        <h2 style="font-family: 'Syne', sans-serif; font-size: 1.35rem; margin-top: 0.85rem; margin-bottom: 0.75rem; color: var(--text-main);">${item.judul || 'Untitled Project'}</h2>
         
         <p style="color: var(--text-muted); font-size: 0.86rem; line-height: 1.6; margin-bottom: 1.25rem;">${item.deskripsi || 'No description provided.'}</p>
 
