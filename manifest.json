@@ -9,10 +9,9 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://fav.farm/✨",
+      "src": "https://fav.farm/💼",
       "sizes": "192x192 512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }

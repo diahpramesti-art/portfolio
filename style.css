@@ -637,7 +637,7 @@ section.visible {
 }
 
 /* ==========================================================================
-   8. MODAL QUICK VIEW & FORMS (POSISI TOMBOL X RUANG KHUSUS & SCROLLBAR RAPI)
+   8. MODAL QUICK VIEW & FORMS (AREA KHUSUS TOMBOL X & SCROLL KEDAP)
    ========================================================================== */
 .modal-overlay {
     position: fixed;
@@ -655,7 +655,7 @@ section.visible {
     opacity: 0;
     visibility: hidden;
     transition: all 0.25s ease;
-    overscroll-behavior: contain;
+    touch-action: none;
 }
 
 .modal-overlay.active {
@@ -676,19 +676,21 @@ section.visible {
     overflow-x: hidden;
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
     overscroll-behavior: contain;
+    touch-action: pan-y;
 }
 
-/* BARIS ATAS KHUSUS DI DALAM MODAL AGAR TOMBOL X TIDAK MENABRAK GAMBAR */
+/* BARIS HEADER DI DALAM MODAL AGAR TOMBOL X PUNYA AREA SENDIRI */
 .modal-top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: 2.5rem;
-    margin-bottom: 0.85rem;
+    padding-right: 2.75rem;
+    /* Ruang aman agar teks tidak nabrak tombol X */
     min-height: 32px;
+    margin-bottom: 0.65rem;
 }
 
-/* RAPIKAN SCROLLBAR MODAL */
+/* SCROLLBAR DESAIN CLEAN UNTUK MODAL CARD */
 .modal-card::-webkit-scrollbar {
     width: 5px;
 }
@@ -707,11 +709,11 @@ section.visible {
     background: var(--accent);
 }
 
-/* TOMBOL X DENGAN FLOATING BADGE ELEGAN */
+/* TOMBOL X DENGAN POSISI RAPI DI AREA PUTIH ATAS */
 .modal-close {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 1.1rem;
+    right: 1.25rem;
     background: #F1F5F9;
     border: 1px solid var(--border);
     color: var(--text-main);
@@ -721,9 +723,9 @@ section.visible {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
-    z-index: 20;
+    z-index: 30;
     transition: all 0.2s ease;
     box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
 }
@@ -1031,6 +1033,7 @@ footer {
     border: 1px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
+    margin-top: 0.25rem;
     margin-bottom: 1rem;
     display: flex;
     align-items: center;

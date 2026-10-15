@@ -31,29 +31,38 @@ function trackEvent(action, category, label) {
     }
 }
 
-// 🔒 HELPER SCROLL LOCK BACKGROUND (MEMPROSASI POSISI SCROLL PRESISI SUPAYA TIDAK AKAN LOMPAT KE ATAS)
+// 🔒 HELPER SCROLL LOCK BACKGROUND (PRESISI KUNCI TOTAL DUA ARAH)
 let savedScrollY = 0;
 
 function toggleBodyScroll(disable) {
+    const htmlEl = document.documentElement;
+    const bodyEl = document.body;
+
     if (disable) {
-        savedScrollY = window.pageYOffset || document.documentElement.scrollTop;
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${savedScrollY}px`;
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
+        savedScrollY = window.pageYOffset || htmlEl.scrollTop || bodyEl.scrollTop;
+        bodyEl.style.position = 'fixed';
+        bodyEl.style.top = `-${savedScrollY}px`;
+        bodyEl.style.left = '0';
+        bodyEl.style.right = '0';
+        bodyEl.style.width = '100%';
+        bodyEl.style.overflow = 'hidden';
+        htmlEl.style.overflow = 'hidden';
+        htmlEl.style.scrollBehavior = 'auto';
     } else {
-        const scrollY = Math.abs(parseInt(document.body.style.top || '0', 10)) || savedScrollY;
-        document.documentElement.style.scrollBehavior = 'auto';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
+        const scrollY = Math.abs(parseInt(bodyEl.style.top || '0', 10)) || savedScrollY;
+        bodyEl.style.position = '';
+        bodyEl.style.top = '';
+        bodyEl.style.left = '';
+        bodyEl.style.right = '';
+        bodyEl.style.width = '';
+        bodyEl.style.overflow = '';
+        htmlEl.style.overflow = '';
+
         window.scrollTo(0, scrollY);
-        document.documentElement.style.scrollBehavior = '';
+
+        setTimeout(() => {
+            htmlEl.style.scrollBehavior = '';
+        }, 50);
     }
 }
 
@@ -157,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // SHORTCUT TUTUP MODAL KLIK OUTSIDE / BACKDROP DAN CEGAH SCROLL BOCOR
+    // SHORTCUT TUTUP MODAL KLIK OUTSIDE + CEGAH SCROLL CHAINING BOCOR
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
@@ -165,8 +174,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeContactModal();
             }
         });
+
+        // Mencegah scroll mouse wheel bocor ke background
         overlay.addEventListener('wheel', (e) => {
-            if (e.target === overlay) {
+            const modalCard = overlay.querySelector('.modal-card');
+            if (!modalCard) return;
+
+            if (!modalCard.contains(e.target)) {
+                e.preventDefault();
+                return;
+            }
+
+            const scrollTop = modalCard.scrollTop;
+            const scrollHeight = modalCard.scrollHeight;
+            const clientHeight = modalCard.clientHeight;
+            const delta = e.deltaY;
+
+            if (delta < 0 && scrollTop <= 0) {
+                e.preventDefault(); // Tahan scroll di paling atas
+            } else if (delta > 0 && scrollTop + clientHeight >= scrollHeight - 1) {
+                e.preventDefault(); // Tahan scroll di paling bawah
+            }
+        }, { passive: false });
+
+        // Mencegah touch drag bocor di layar sentuh / mobile
+        overlay.addEventListener('touchmove', (e) => {
+            const modalCard = overlay.querySelector('.modal-card');
+            if (!modalCard || !modalCard.contains(e.target)) {
                 e.preventDefault();
             }
         }, { passive: false });
