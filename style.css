@@ -637,7 +637,7 @@ section.visible {
 }
 
 /* ==========================================================================
-   8. MODAL QUICK VIEW & FORMS
+   8. MODAL QUICK VIEW & FORMS (FIXED SCROLLBAR & OVERFLOW)
    ========================================================================== */
 .modal-overlay {
     position: fixed;
@@ -672,7 +672,27 @@ section.visible {
     position: relative;
     max-height: 85vh;
     overflow-y: auto;
+    overflow-x: hidden;
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+}
+
+/* RAPIKAN TAMPILAN SCROLLBAR DI DALAM MODAL */
+.modal-card::-webkit-scrollbar {
+    width: 5px;
+}
+
+.modal-card::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 15px 0;
+}
+
+.modal-card::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 10px;
+}
+
+.modal-card::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
 }
 
 .modal-close {
@@ -973,17 +993,10 @@ footer {
 }
 
 /* ==========================================================================
-   11. MODAL LOCK SCROLL, BACKDROP & GALLERY CAROUSEL
+   11. MODAL LOCK SCROLL & GALLERY CAROUSEL (MENCEGAH HALAMAN LOMPAT KE ATAS)
    ========================================================================== */
-html.modal-open,
 body.modal-open {
     overflow: hidden !important;
-    height: 100vh !important;
-    touch-action: none;
-}
-
-.modal-card {
-    touch-action: pan-y !important;
 }
 
 .modal-gallery-wrapper {

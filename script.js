@@ -31,14 +31,12 @@ function trackEvent(action, category, label) {
     }
 }
 
-// 🔒 HELPER SCROLL LOCK BACKGROUND
+// 🔒 HELPER SCROLL LOCK BACKGROUND (TANPA MEMBUAT HALAMAN LOMPAT KE ATAS)
 function toggleBodyScroll(disable) {
     if (disable) {
         document.body.classList.add('modal-open');
-        document.documentElement.classList.add('modal-open');
     } else {
         document.body.classList.remove('modal-open');
-        document.documentElement.classList.remove('modal-open');
     }
 }
 
@@ -142,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 🖱️ SHORTCUT TUTUP MODAL KLIK DENGAN BACKDROP / OUTSIDE
+    // SHORTCUT TUTUP MODAL KLIK PADA AREA OUTSIDE / BACKDROP
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
@@ -410,7 +408,7 @@ function renderCards(data) {
     }).join('');
 }
 
-// 👁️ QUICK VIEW MODAL
+// QUICK VIEW MODAL
 function openModal(id) {
     const item = globalData.find(d => Number(d.id) === Number(id));
     if (!item) return;
@@ -421,7 +419,6 @@ function openModal(id) {
     const modalContent = document.getElementById('modal-content');
     if (!modalContent) return;
 
-    // Render Gambar / Galeri Carousel jika ada
     let galleryHTML = '';
     if (currentModalImages.length > 0) {
         const hasMultiple = currentModalImages.length > 1;
@@ -489,7 +486,7 @@ function scrollPortfolio(direction) {
     grid.scrollBy({ left: 330 * direction, behavior: 'smooth' });
 }
 
-// ✉️ CONTACT MODAL
+// CONTACT MODAL
 function openContactModal() {
     const modal = document.getElementById('contact-modal');
     if (!modal) return;
